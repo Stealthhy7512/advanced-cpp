@@ -20,6 +20,8 @@ namespace Custom {
     void push_back(const T& value);
     void push_back(T&& value);
 
+    bool empty() const noexcept;
+
     // TODO add iterators, vector copy/move, shrinking, insert/delete etc., pop_back, push another iterator,
     // copy and move constructors
     

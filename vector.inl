@@ -31,6 +31,11 @@ namespace Custom {
   }
 
   template <typename T>
+  bool Vector<T>::empty() const noexcept {
+    return _size == 0;
+  }
+
+  template <typename T>
   void Vector<T>::resize() {
     size_t new_capacity = _capacity ? _capacity * 2 : 1;
     std::unique_ptr<T[]> new_data{ std::make_unique<T[]>(new_capacity) };
