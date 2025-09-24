@@ -18,6 +18,7 @@ namespace Custom {
     Vector& operator=(Vector&& other) noexcept;
     
     size_t size() const noexcept;
+    size_t capacity() const noexcept;
     
     T operator[](const size_t index) const noexcept;
     std::expected<T, std::string_view> at(const size_t index) const;

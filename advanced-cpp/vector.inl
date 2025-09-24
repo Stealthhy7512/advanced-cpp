@@ -35,6 +35,11 @@ namespace Custom {
   }
 
   template <typename T>
+  size_t Vector<T>::capacity() const noexcept {
+    return _capacity;
+  }
+
+  template <typename T>
   Vector<T>& Vector<T>::operator=(const Vector& other) noexcept {
     if (this == &other) {
       return *this;
