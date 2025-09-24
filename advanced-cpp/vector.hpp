@@ -25,7 +25,7 @@ namespace Custom {
     constexpr size_type capacity() const noexcept;
     
     reference operator[](const size_type index) noexcept;
-    std::expected<T, std::string_view> at(const size_type index) const; // change return to reference
+    std::expected<value_type, std::string_view> at(const size_type index) const; // change return to reference
     
     constexpr void push_back(const reference value);
     constexpr void push_back(T&& value);
@@ -43,7 +43,7 @@ namespace Custom {
   private:
     size_type _size;
     size_type _capacity;
-    std::unique_ptr<T[]> _data;
+    std::unique_ptr<value_type[]> _data;
     
     void resize();
   };

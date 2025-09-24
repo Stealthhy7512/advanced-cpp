@@ -82,7 +82,7 @@ namespace Custom {
   }
 
   template <typename T>
-  std::expected<T, std::string_view> Vector<T>::at(const Vector<T>::size_type index) const {
+  std::expected<typename Vector<T>::value_type, std::string_view> Vector<T>::at(const Vector<T>::size_type index) const {
     if (index >= _size) {
       return std::unexpected<std::string_view>("Vector index out of range.");
     }
@@ -103,7 +103,7 @@ namespace Custom {
   template <typename T>
   void Vector<T>::resize() {
     Vector<T>::size_type new_capacity = _capacity ? _capacity * 2 : 1;
-    std::unique_ptr<T[]> new_data{ std::make_unique<T[]>(new_capacity) };
+    std::unique_ptr<Vector<T>::value_type[]> new_data{ std::make_unique<Vector<T>::value_type[]>(new_capacity) };
 
     for (Vector<T>::size_type i{}; i < _size; ++i) {
       new_data[i] = std::move(_data[i]);
