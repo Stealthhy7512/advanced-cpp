@@ -32,12 +32,12 @@ namespace Custom {
 
   // Size methods
   template <typename T>
-  size_t Vector<T>::size() const noexcept {
+  Vector<T>::size_type Vector<T>::size() const noexcept {
     return _size;
   }
 
   template <typename T>
-  size_t Vector<T>::capacity() const noexcept {
+  Vector<T>::size_type Vector<T>::capacity() const noexcept {
     return _capacity;
   }
 
@@ -48,7 +48,7 @@ namespace Custom {
 
   // Assignment operators
   template <typename T>
-  Vector<T>& Vector<T>::operator=(const Vector& other) noexcept {
+  Vector<T>& Vector<T>::operator=(const Vector& other) {
     if (this == &other) {
       return *this;
     }
@@ -77,12 +77,12 @@ namespace Custom {
 
   // Element retrieval
   template <typename T>
-  T Vector<T>::operator[](const size_t index) const noexcept {
+  Vector<T>::reference Vector<T>::operator[](const Vector<T>::size_type index) noexcept {
     return _data[index];
   }
 
   template <typename T>
-  std::expected<T, std::string_view> Vector<T>::at(const size_t index) const {
+  std::expected<T, std::string_view> Vector<T>::at(const Vector<T>::size_type index) const {
     if (index >= _size) {
       return std::unexpected<std::string_view>("Vector index out of range.");
     }
@@ -91,21 +91,21 @@ namespace Custom {
   }
 
   template <typename T>
-  T& Vector<T>::front() const noexcept {
+  Vector<T>::reference Vector<T>::front() noexcept {
     return _data[0];
   }
 
   template <typename T>
-  T& Vector<T>::back() const noexcept {
+  Vector<T>::reference Vector<T>::back() noexcept {
     return _data[_size - 1];
   }
 
   template <typename T>
-  void Vector<T>::resize() noexcept {
-    size_t new_capacity = _capacity ? _capacity * 2 : 1;
+  void Vector<T>::resize() {
+    Vector<T>::size_type new_capacity = _capacity ? _capacity * 2 : 1;
     std::unique_ptr<T[]> new_data{ std::make_unique<T[]>(new_capacity) };
 
-    for (size_t i{}; i < _size; ++i) {
+    for (Vector<T>::size_type i{}; i < _size; ++i) {
       new_data[i] = std::move(_data[i]);
     }
 
@@ -115,7 +115,7 @@ namespace Custom {
 
   // Element modifiers
   template <typename T>
-  void Vector<T>::push_back(const T& value) {
+  void Vector<T>::push_back(const Vector<T>::reference value) {
     if (_size == _capacity) {
       resize();
     }
