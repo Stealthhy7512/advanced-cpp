@@ -99,11 +99,11 @@ namespace Custom {
   constexpr Vector<T>::reference Vector<T>::back() noexcept {
     return _data[_size - 1];
   }
-
+  
   template <typename T>
   void Vector<T>::resize() {
     Vector<T>::size_type new_capacity = _capacity ? _capacity * 2 : 1;
-    std::unique_ptr<Vector<T>::value_type[]> new_data{ std::make_unique<Vector<T>::value_type[]>(new_capacity) };
+    auto new_data{ std::make_unique<Vector<T>::value_type[]>(new_capacity) };
 
     for (Vector<T>::size_type i{}; i < _size; ++i) {
       new_data[i] = std::move(_data[i]);
