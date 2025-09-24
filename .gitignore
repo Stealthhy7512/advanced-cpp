@@ -1,4 +1,47 @@
-x64
-*.vcxproj
-*.vcxproj.*
+# ===============================
+# Visual Studio / CMake ignore
+# ===============================
+
+# Visual Studio generated files
+.vs/
+*.vcxproj*
+*.sln
+*.user
+*.dbmdl
+*.VC.db
+*.VC.VC.opendb
+*.VC.VC.opendb.*.tmp
+
+# Build output folders
+build/
+Debug/
+Release/
+x64/
+bin/
+lib/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+
+# Catch2 (if downloaded)
+_catch2/
+
+# Generated test binaries
 *.exe
+*.obj
+*.pdb
+*.ilk
+*.log
+*.out
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
