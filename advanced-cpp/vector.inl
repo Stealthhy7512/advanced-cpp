@@ -6,6 +6,7 @@
 #include "vector.hpp"
 
 namespace Custom {
+  // Constructors and destructor
   template <typename T>
   Vector<T>::Vector() : _size(0), _capacity(0), _data(nullptr) {}
 
@@ -29,6 +30,7 @@ namespace Custom {
   template <typename T>
   Vector<T>::~Vector() = default;
 
+  // Size methods
   template <typename T>
   size_t Vector<T>::size() const noexcept {
     return _size;
@@ -39,6 +41,12 @@ namespace Custom {
     return _capacity;
   }
 
+  template <typename T>
+  bool Vector<T>::empty() const noexcept {
+    return _size == 0;
+  }
+
+  // Assignment operators
   template <typename T>
   Vector<T>& Vector<T>::operator=(const Vector& other) noexcept {
     if (this == &other) {
@@ -67,6 +75,7 @@ namespace Custom {
     return *this;
   }
 
+  // Element retrieval
   template <typename T>
   T Vector<T>::operator[](const size_t index) const noexcept {
     return _data[index];
@@ -79,11 +88,6 @@ namespace Custom {
     }
 
     return _data[index];
-  }
-
-  template <typename T>
-  bool Vector<T>::empty() const noexcept {
-    return _size == 0;
   }
 
   template <typename T>
@@ -109,6 +113,7 @@ namespace Custom {
     _capacity = new_capacity;
   }
 
+  // Element modifiers
   template <typename T>
   void Vector<T>::push_back(const T& value) {
     if (_size == _capacity) {

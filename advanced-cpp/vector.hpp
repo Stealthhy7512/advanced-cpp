@@ -32,7 +32,8 @@ namespace Custom {
     T& back() const noexcept;
 
     // TODO add iterators, efficient shrinking, insert/delete etc., pop_back, push another iterator,
-    // pointer types, const methods
+    // pointer types, const methods, clear, initializer list constructor, default inserted constructor
+    // vector comparison
     
   private:
     size_t _size;
