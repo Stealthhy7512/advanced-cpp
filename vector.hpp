@@ -10,7 +10,12 @@ namespace Custom {
   class Vector {
   public:
     Vector();
+    Vector(const Vector& other);
+    Vector(Vector&& other) noexcept;
     ~Vector();
+
+    Vector& operator=(const Vector& other) noexcept;
+    Vector& operator=(Vector&& other) noexcept;
     
     size_t size() const noexcept;
     
@@ -21,6 +26,9 @@ namespace Custom {
     void push_back(T&& value);
 
     bool empty() const noexcept;
+
+    T& front() const noexcept;
+    T& back() const noexcept;
 
     // TODO add iterators, vector copy/move, shrinking, insert/delete etc., pop_back, push another iterator,
     // copy and move constructors
