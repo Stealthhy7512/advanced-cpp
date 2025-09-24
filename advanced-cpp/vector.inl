@@ -32,23 +32,23 @@ namespace Custom {
 
   // Size methods
   template <typename T>
-  Vector<T>::size_type Vector<T>::size() const noexcept {
+  constexpr Vector<T>::size_type Vector<T>::size() const noexcept {
     return _size;
   }
 
   template <typename T>
-  Vector<T>::size_type Vector<T>::capacity() const noexcept {
+  constexpr Vector<T>::size_type Vector<T>::capacity() const noexcept {
     return _capacity;
   }
 
   template <typename T>
-  bool Vector<T>::empty() const noexcept {
+  constexpr bool Vector<T>::empty() const noexcept {
     return _size == 0;
   }
 
   // Assignment operators
   template <typename T>
-  Vector<T>& Vector<T>::operator=(const Vector& other) {
+  constexpr Vector<T>& Vector<T>::operator=(const Vector& other) {
     if (this == &other) {
       return *this;
     }
@@ -62,7 +62,7 @@ namespace Custom {
   }
 
   template <typename T>
-  Vector<T>& Vector<T>::operator=(Vector&& other) noexcept {
+  constexpr Vector<T>& Vector<T>::operator=(Vector&& other) noexcept {
     if (this != &other) {
       _size = other._size;
       _capacity = other._capacity;
@@ -91,12 +91,12 @@ namespace Custom {
   }
 
   template <typename T>
-  Vector<T>::reference Vector<T>::front() noexcept {
+  constexpr Vector<T>::reference Vector<T>::front() noexcept {
     return _data[0];
   }
 
   template <typename T>
-  Vector<T>::reference Vector<T>::back() noexcept {
+  constexpr Vector<T>::reference Vector<T>::back() noexcept {
     return _data[_size - 1];
   }
 
@@ -115,7 +115,7 @@ namespace Custom {
 
   // Element modifiers
   template <typename T>
-  void Vector<T>::push_back(const Vector<T>::reference value) {
+  constexpr void Vector<T>::push_back(const Vector<T>::reference value) {
     if (_size == _capacity) {
       resize();
     }
@@ -124,7 +124,7 @@ namespace Custom {
   }
 
   template <typename T>
-  void Vector<T>::push_back(T&& value) {
+  constexpr void Vector<T>::push_back(T&& value) {
     if (_size == _capacity) {
       resize();
     }

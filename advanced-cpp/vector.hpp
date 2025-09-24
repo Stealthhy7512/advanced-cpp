@@ -18,24 +18,25 @@ namespace Custom {
     Vector(Vector&& other) noexcept;
     ~Vector();
 
-    Vector& operator=(const Vector& other);
-    Vector& operator=(Vector&& other) noexcept;
+    constexpr Vector& operator=(const Vector& other);
+    constexpr Vector& operator=(Vector&& other) noexcept;
     
-    size_type size() const noexcept;
-    size_type capacity() const noexcept;
+    constexpr size_type size() const noexcept;
+    constexpr size_type capacity() const noexcept;
     
     reference operator[](const size_type index) noexcept;
     std::expected<T, std::string_view> at(const size_type index) const; // change return to reference
     
-    void push_back(const reference value);
-    void push_back(T&& value);
+    constexpr void push_back(const reference value);
+    constexpr void push_back(T&& value);
 
-    bool empty() const noexcept;
+    constexpr bool empty() const noexcept;
 
-    reference front() noexcept;
-    reference back() noexcept;
+    // FIXME: with reference wrapped std::expected, return unexpected on contract violation
+    constexpr reference front() noexcept;
+    constexpr reference back() noexcept;
 
-    // TODO add iterators, efficient shrinking, insert/delete etc., pop_back, push another iterator,
+    // TODO: add iterators, efficient shrinking, insert/delete etc., pop_back, push another iterator,
     // pointer types, const methods, clear, initializer list constructor, default inserted constructor
     // vector comparison
     
