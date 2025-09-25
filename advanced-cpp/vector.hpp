@@ -16,6 +16,8 @@ namespace Custom {
     Vector();
     Vector(const Vector& other);
     Vector(Vector&& other) noexcept;
+    Vector(const std::initializer_list<value_type>& ilist);
+    Vector(std::initializer_list<value_type>&& ilist);
     ~Vector();
 
     constexpr Vector& operator=(const Vector& other);
@@ -29,6 +31,7 @@ namespace Custom {
     
     constexpr void push_back(const reference value);
     constexpr void push_back(T&& value);
+    constexpr reference pop_back();
 
     constexpr bool empty() const noexcept;
 

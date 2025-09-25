@@ -2,6 +2,7 @@
 #include <expected>
 #include <string_view>
 #include <algorithm>
+#include <stdexcept>
 
 #include "vector.hpp"
 
@@ -25,6 +26,34 @@ namespace Custom {
   Vector<T>::Vector(Vector&& other) noexcept : _size(other._size), _capacity(other._capacity), _data(std::move(other._data)) {
     other._size = 0;
     other._capacity = 0;
+  }
+
+  template <typename T>
+  Vector<T>::Vector(const std::initializer_list<Vector<T>::value_type>& ilist) {
+    _size = ilist.size();
+    _capacity = ilist.size();
+
+    auto new_data{ std::make_unique<Vector<T>::value_type[]>(_size) };
+    Vector<T>::size_type i{};
+    for (auto elem : ilist) {
+      new_data[i++] = elem;
+    }
+
+    _data = std::move(new_data);
+  }
+
+  template <typename T>
+  Vector<T>::Vector(std::initializer_list<Vector<T>::value_type>&& ilist) {
+    _size = ilist.size();
+    _capacity = ilist.size();
+
+    auto new_data{ std::make_unique<Vector<T>::value_type[]>(_size) };
+    Vector<T>::size_type i{};
+    for (auto elem : ilist) {
+      new_data[i++] = std::move(elem);
+    }
+
+    _data = std::move(new_data);
   }
 
   template <typename T>
@@ -130,5 +159,14 @@ namespace Custom {
     }
 
     _data[_size++] = std::move(value);
+  }
+
+  template <typename T>
+  constexpr Vector<T>::reference Vector<T>::pop_back() {
+    if (this->empty()) {
+      throw std::length_error("Vector is empty.");
+    }
+
+    return _data[_size--];
   }
 }
