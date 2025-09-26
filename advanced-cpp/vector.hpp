@@ -27,9 +27,10 @@ namespace Custom {
     constexpr size_type capacity() const noexcept;
     
     reference operator[](const size_type index) noexcept;
-    std::optional<reference> at(const size_type index) const; // change return to reference
+    std::optional<reference> at(const size_type index) const;
     
     template <typename U>
+    requires std::convertible_to<U, T>
     void push_back(U&& value);
     value_type pop_back();
 
@@ -39,9 +40,9 @@ namespace Custom {
     constexpr reference front() noexcept;
     constexpr reference back() noexcept;
 
-    // TODO: add iterators, efficient shrinking, insert/delete etc., pop_back, push another iterator,
-    // pointer types, const methods, clear, initializer list constructor, default inserted constructor
-    // vector comparison, ::allocate overload
+    // TODO: add iterators, efficient shrinking, insert/delete etc., push another iterator,
+    // pointer types, const methods, clear, default inserted constructor
+    // vector comparison
     
   private:
     struct RawDeleter {
