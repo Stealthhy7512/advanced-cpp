@@ -16,12 +16,12 @@ namespace Custom {
 
     Vector();
     Vector(const Vector& other);
-    Vector(Vector&& other) noexcept;
+    Vector(Vector&&) noexcept;
     Vector(std::initializer_list<value_type> ilist);
     ~Vector();
 
     Vector& operator=(const Vector& other);
-    Vector& operator=(Vector&& other) noexcept;
+    Vector& operator=(Vector&&) noexcept;
     
     constexpr size_type size() const noexcept;
     constexpr size_type capacity() const noexcept;

@@ -20,10 +20,7 @@ namespace Custom {
   }
 
   template <typename T>
-  Vector<T>::Vector(Vector&& other) noexcept : _size(other._size), _capacity(other._capacity), _data(std::move(other._data)) {
-    other._size = 0;
-    other._capacity = 0;
-  }
+  Vector<T>::Vector(Vector&&) noexcept = default;
 
   template <typename T>
   Vector<T>::Vector(std::initializer_list<Vector<T>::value_type> ilist) : _size(ilist.size()), _capacity(ilist.size()) {
@@ -70,18 +67,7 @@ namespace Custom {
   }
 
   template <typename T>
-  Vector<T>& Vector<T>::operator=(Vector&& other) noexcept {
-    if (this != &other) {
-      _size = other._size;
-      _capacity = other._capacity;
-      _data = std::move(other._data);
-
-      other._size = 0;
-      other._capacity = 0;
-    }
-
-    return *this;
-  }
+  Vector<T>& Vector<T>::operator=(Vector&&) noexcept = default;
   
   // Element retrieval
   template <typename T>
