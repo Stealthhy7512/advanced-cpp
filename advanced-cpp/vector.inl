@@ -130,11 +130,10 @@ namespace Custom {
   }
 
   template <typename T>
-  std::unique_ptr<typename Vector<T>::value_type, typename Vector<T>::Deleter> allocate(const typename Vector<T>::size_type n) {
+  std::unique_ptr<typename Vector<T>::value_type, typename Vector<T>::Deleter> Vector<T>::allocate(const typename Vector<T>::size_type n) const {
     return std::unique_ptr<Vector<T>::value_type, Vector<T>::Deleter>(
       static_cast<T*>(::operator new(sizeof(T) * n)),
-      Deleter{}
+      Vector<T>::Deleter{}
     );
   }
-
 }

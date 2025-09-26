@@ -56,7 +56,7 @@ namespace Custom {
     std::unique_ptr<T, Deleter> _data;
 
     void resize();
-    std::unique_ptr<type_name, Deleter> allocate(size_type n);
+    std::unique_ptr<value_type, Deleter> allocate(size_type n) const;
   };
 }
 
