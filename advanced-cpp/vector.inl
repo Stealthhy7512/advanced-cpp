@@ -110,7 +110,7 @@ namespace Custom {
 
   template <typename T>
   constexpr Vector<T>::reference Vector<T>::front() noexcept {
-    return _data.get();
+    return _data.get()[0];
   }
 
   template <typename T>
