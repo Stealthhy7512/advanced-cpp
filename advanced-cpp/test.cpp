@@ -48,12 +48,10 @@ TEST_CASE("Empty vector disallows pop_back", "[Vector]") {
 }
 
 TEST_CASE("Vector initializer list constructor works", "[Vector]") {
-  std::initializer_list<double> ilist{1., 2., 3.};
+  std::initializer_list<double> ilist{ 1., 2., 3. };
   Custom::Vector<double> vec{ ilist };
   REQUIRE(vec.size() == 3);
-}
 
-TEST_CASE("Vector rvalue initializer list constructor works", "[Vector]") {
-  Custom::Vector<int> vec{ {1, 2, 3} };
-  REQUIRE(vec.size() == 3);
+  Custom::Vector<int> vec_rvalue{ {1, 2, 3} };
+  REQUIRE(vec_rvalue.size() == 3);
 }
