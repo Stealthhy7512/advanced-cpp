@@ -37,9 +37,8 @@ TEST_CASE("Vector pop_back works", "[Vector]") {
   vec.push_back(2);
   CHECK(vec.back() == 2);
 
-  vec.pop_back();
-  REQUIRE(vec.size() == 1);
   REQUIRE(vec.pop_back() == 2);
+  REQUIRE(vec.size() == 1);
 }
 
 TEST_CASE("Empty vector disallows pop_back", "[Vector]") {
