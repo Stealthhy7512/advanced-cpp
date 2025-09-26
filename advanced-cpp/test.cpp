@@ -54,3 +54,14 @@ TEST_CASE("Vector initializer list constructor works", "[Vector]") {
   Custom::Vector<int> vec_rvalue{ {1, 2, 3} };
   REQUIRE(vec_rvalue.size() == 3);
 }
+
+TEST_CASE("Vector moving works", "[Vector]") {
+  Custom::Vector<int> vec{ {1, 2, 3} };
+  Custom::Vector<int> vec2{ {5, 6, 7, 8, 9} };
+
+  Custom::Vector<int> vec_moved(std::move(vec));
+  REQUIRE(vec_moved.size() == vec.size());
+
+  vec_moved = std::move(vec2);
+  REQUIRE(vec_moved.size() == vec2.size());
+}
