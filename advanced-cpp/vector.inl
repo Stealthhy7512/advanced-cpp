@@ -118,21 +118,6 @@ namespace Custom {
     return _data.get()[_size - 1];
   }
   
-  template <typename T>
-  void Vector<T>::resize() {
-    Vector<T>::size_type new_capacity = _capacity ? _capacity * 2 : 1;
-    auto new_storage{ std::unique_ptr<Vector<T>::value_type, Vector<T>::Deleter>(
-      static_cast<T*>(::operator new(sizeof(T)* new_capacity)),
-      Deleter{}
-      ) };
-
-    std::uninitialized_move(_data.get(), _data.get() + _size, new_storage.get());
-    std::destroy(_data.get(), _data.get() + _size);
-
-    _data = std::move(new_storage);
-    _capacity = new_capacity;
-  }
-
   // Element modifiers
   template <typename T>
   template <typename U>
@@ -154,6 +139,29 @@ namespace Custom {
     std::destroy_at(_data.get() + _size);
 
     return val;
+  }
+
+  template <typename T>
+  void Vector<T>::resize() {
+    Vector<T>::size_type new_capacity = _capacity ? _capacity * 2 : 1;
+    auto new_storage{ std::unique_ptr<Vector<T>::value_type, Vector<T>::Deleter>(
+      static_cast<T*>(::operator new(sizeof(T) * new_capacity)),
+      Deleter{}
+      ) };
+
+    std::uninitialized_move(_data.get(), _data.get() + _size, new_storage.get());
+    std::destroy(_data.get(), _data.get() + _size);
+
+    _data = std::move(new_storage);
+    _capacity = new_capacity;
+  }
+
+  template <typename T>
+  std::unique_ptr<typename Vector<T>::value_type, typename Vector<T>::Deleter> allocate(const typename Vector<T>::size_type n) {
+    return std::unique_ptr<Vector<T>::value_type, Vector<T>::Deleter>(
+      static_cast<T*>(::operator new(sizeof(T) * n)),
+      Deleter{}
+    );
   }
 
 }
