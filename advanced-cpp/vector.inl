@@ -29,29 +29,13 @@ namespace Custom {
   }
 
   template <typename T>
-  Vector<T>::Vector(const std::initializer_list<Vector<T>::value_type>& ilist) {
+  Vector<T>::Vector(std::initializer_list<Vector<T>::value_type> ilist) {
     _size = ilist.size();
     _capacity = ilist.size();
 
-    auto new_data{ std::make_unique<Vector<T>::value_type[]>(_size) };
-    Vector<T>::size_type i{};
-    for (auto elem : ilist) {
-      new_data[i++] = elem;
-    }
+    auto new_data{ std::make_unique_for_overwrite<Vector<T>::value_type[]>(_size) };
 
-    _data = std::move(new_data);
-  }
-
-  template <typename T>
-  Vector<T>::Vector(std::initializer_list<Vector<T>::value_type>&& ilist) {
-    _size = ilist.size();
-    _capacity = ilist.size();
-
-    auto new_data{ std::make_unique<Vector<T>::value_type[]>(_size) };
-    Vector<T>::size_type i{};
-    for (auto elem : ilist) {
-      new_data[i++] = std::move(elem);
-    }
+    std::uninitialized_copy(ilist.begin(), ilist.end(), new_data.get());
 
     _data = std::move(new_data);
   }

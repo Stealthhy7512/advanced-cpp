@@ -16,8 +16,7 @@ namespace Custom {
     Vector();
     Vector(const Vector& other);
     Vector(Vector&& other) noexcept;
-    Vector(const std::initializer_list<value_type>& ilist);
-    Vector(std::initializer_list<value_type>&& ilist);
+    Vector(std::initializer_list<value_type> ilist);
     ~Vector();
 
     constexpr Vector& operator=(const Vector& other);
