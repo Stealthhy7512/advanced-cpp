@@ -15,7 +15,7 @@ namespace Custom {
   template <typename T>
   Vector<T>::Vector(const Vector& other) : _size(other._size), _capacity(other._capacity), _data(allocate(_capacity)) {
     if (_size) {
-      std::ranges::uninitialized_copy_n(other._data.get(), _size, _data.get());
+      std::uninitialized_copy_n(other._data.get(), _size, _data.get());
     } 
   }
 
@@ -25,7 +25,7 @@ namespace Custom {
   template <typename T>
   Vector<T>::Vector(std::initializer_list<Vector<T>::value_type> ilist) : _size(ilist.size()), _capacity(ilist.size()), _data(allocate(_capacity)) {
     if (_size) {
-      std::ranges::unitialized_copy(ilist.begin(), ilist.end(), _data.get());
+      std::uninitialized_copy(ilist.begin(), ilist.end(), _data.get());
     }
   }
 
@@ -120,7 +120,7 @@ namespace Custom {
     Vector<T>::size_type new_capacity = _capacity ? _capacity * 2 : 1;
     auto new_storage{ allocate(new_capacity) };
 
-    std::ranges::unitialized_move_n(_data.get(), _size, new_storage.get());
+    std::uninitialized_move_n(_data.get(), _size, new_storage.get());
     std::ranges::destroy_n(_data.get(), _size);
 
     _data = std::move(new_storage);
