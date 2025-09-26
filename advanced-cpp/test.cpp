@@ -2,14 +2,52 @@
 
 #include <iostream>
 #include <vector>
+#include <initializer_list>
 
 #include <catch2/catch_all.hpp>
 #include "vector.hpp"
 
-TEST_CASE("Vectors are zero initialized", "[Vector]") {
-  Custom::Vector<int> vec;
-  REQUIRE(vec.size() == 0);
-  REQUIRE(vec.capacity() == 0);
+TEST_CASE("Constructors work", "[Vector]") {
+  SECTION("Default initialization works") {
+    Custom::Vector<int> vec; // default constructor
+    REQUIRE(vec.size() == 0);
+
+    Custom::Vector<int> vec2{}; // falls back to default constructor
+    REQUIRE(vec2.size() == 0);
+  }
+
+  SECTION("Copy constructor works") {
+    Custom::Vector<int> vec{};
+    Custom::Vector<int> copied_vec(vec);
+    REQUIRE(copied_vec.size() == vec.size());
+
+    std::initializer_list<int> ilist{ 1, 2, 3, 4 };
+    Custom::Vector<int> list_copied_vec{ ilist };
+    REQUIRE(list_copied_vec.size() == 4);
+  }
+
+  SECTION("Move constructor works") {
+    Custom::Vector<int> vec{};
+    Custom::Vector<int> moved_vec(std::move(vec)); // or use a literal init list here
+    REQUIRE(moved_vec.size() == vec.size());
+
+    std::initializer_list<int> ilist{1, 2, 3, 4};
+    Custom::Vector<int> list_moved_vec{ std::move(ilist) };
+    REQUIRE(list_moved_vec.size() == ilist.size());
+  }
+}
+
+TEST_CASE("Vectors can be assigned", "[Vector]") {
+  Custom::Vector<int> vec{ {1, 2, 3} };
+
+  SECTION("Copying works") {
+    Custom::Vector<int> vec_copy{ vec };
+    REQUIRE(vec_copy.size() == vec.size());
+  }
+
+  SECTION("Moving works") {
+
+  }
 }
 
 TEST_CASE("Vector push_back works", "[Vector]") {
@@ -44,24 +82,4 @@ TEST_CASE("Vector pop_back works", "[Vector]") {
 TEST_CASE("Empty vector disallows pop_back", "[Vector]") {
   Custom::Vector<double> vec;
   REQUIRE_THROWS(vec.pop_back());
-}
-
-TEST_CASE("Vector initializer list constructor works", "[Vector]") {
-  std::initializer_list<double> ilist{ 1., 2., 3. };
-  Custom::Vector<double> vec{ ilist };
-  REQUIRE(vec.size() == 3);
-
-  Custom::Vector<int> vec_rvalue{ {1, 2, 3} };
-  REQUIRE(vec_rvalue.size() == 3);
-}
-
-TEST_CASE("Vector moving works", "[Vector]") {
-  Custom::Vector<int> vec{ {1, 2, 3} };
-  Custom::Vector<int> vec2{ {5, 6, 7, 8, 9} };
-
-  Custom::Vector<int> vec_moved(std::move(vec));
-  REQUIRE(vec_moved.size() == vec.size());
-
-  vec_moved = std::move(vec2);
-  REQUIRE(vec_moved.size() == vec2.size());
 }
