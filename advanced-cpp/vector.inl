@@ -3,6 +3,7 @@
 #include <string_view>
 #include <algorithm>
 #include <stdexcept>
+#include <ranges>
 
 #include "vector.hpp"
 
@@ -12,13 +13,10 @@ namespace Custom {
   Vector<T>::Vector() : _size(0), _capacity(0), _data(nullptr) {}
 
   template <typename T>
-  Vector<T>::Vector(const Vector& other) : _size(other._size), _capacity(other._capacity) {
-    if (_capacity > 0) {
-      _data = allocate(_capacity);
-      std::uninitialized_copy(other._data.get(), other._data.get() + _size, _data.get());
-    } else {
-      _data = nullptr;
-    }
+  Vector<T>::Vector(const Vector& other) : _size(other._size), _capacity(other._capacity), _data(allocate(_capacity)) {
+    if (_size) {
+      std::ranges::uninitialized_copy_n(other._data.get(), _size, _data.get());
+    } 
   }
 
   template <typename T>
