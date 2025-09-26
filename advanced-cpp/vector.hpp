@@ -28,8 +28,8 @@ namespace Custom {
     reference operator[](const size_type index) noexcept;
     std::expected<value_type, std::string_view> at(const size_type index) const; // change return to reference
     
-    void push_back(const reference value);
-    void push_back(T&& value);
+    template <typename U>
+    void push_back(U&& value);
     value_type pop_back();
 
     constexpr bool empty() const noexcept;
@@ -40,7 +40,7 @@ namespace Custom {
 
     // TODO: add iterators, efficient shrinking, insert/delete etc., pop_back, push another iterator,
     // pointer types, const methods, clear, initializer list constructor, default inserted constructor
-    // vector comparison
+    // vector comparison, ::allocate overload
     
   private:
 

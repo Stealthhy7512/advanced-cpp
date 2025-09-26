@@ -135,21 +135,13 @@ namespace Custom {
 
   // Element modifiers
   template <typename T>
-  void Vector<T>::push_back(const Vector<T>::reference value) {
+  template <typename U>
+  void Vector<T>::push_back(U&& value) {
     if (_size == _capacity) {
       resize();
     }
 
-    std::construct_at(_data.get() + _size++, value);
-  }
-
-  template <typename T>
-  void Vector<T>::push_back(T&& value) {
-    if (_size == _capacity) {
-      resize();
-    }
-
-    std::construct_at(_data.get() + _size++, std::move(value));
+    std::construct_at(_data.get() + _size++, std::forward<U>(value));
   }
 
   template <typename T>
