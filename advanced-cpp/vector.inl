@@ -14,9 +14,9 @@ namespace Custom {
   template <typename T>
   Vector<T>::Vector(const Vector& other) : _size(other._size), _capacity(other._capacity) {
     if (_capacity > 0) {
-      _data = std::make_unique<T[]>(_capacity);
-
-      std::copy(other._data.get(), other._data.get() + other._size, _data.get());
+      _data = std::unique_ptr<T, Vector<T>::Deleter>(static_cast<T*>(::operator new(sizeof(T) * _capacity)), Deleter{});
+      
+      std::uninitialized_copy(other._data.get(), other._data.get() + _size, _data.get());
     } else {
       _data = nullptr;
     }
@@ -29,15 +29,13 @@ namespace Custom {
   }
 
   template <typename T>
-  Vector<T>::Vector(std::initializer_list<Vector<T>::value_type> ilist) {
-    _size = ilist.size();
-    _capacity = ilist.size();
-
-    auto new_data{ std::make_unique_for_overwrite<Vector<T>::value_type[]>(_size) };
-
-    std::uninitialized_copy(ilist.begin(), ilist.end(), new_data.get());
-
-    _data = std::move(new_data);
+  Vector<T>::Vector(std::initializer_list<Vector<T>::value_type> ilist) : _size(ilist.size()), _capacity(ilist.size()) {
+    if (_capacity > 0) {
+    _data = std::unique_ptr<T, Vector<T>::Deleter>(static_cast<T*>(::operator new(sizeof(T) * _capacity)), Deleter{});
+    std::uninitialized_copy(ilist.begin(), ilist.end(), _data.get());
+    } else {
+      _data = nullptr;
+    }
   }
 
   template <typename T>
@@ -87,11 +85,11 @@ namespace Custom {
 
     return *this;
   }
-
+  
   // Element retrieval
   template <typename T>
   Vector<T>::reference Vector<T>::operator[](const Vector<T>::size_type index) noexcept {
-    return _data[index];
+    return _data.get()[index];
   }
 
   template <typename T>
@@ -100,57 +98,60 @@ namespace Custom {
       return std::unexpected<std::string_view>("Vector index out of range.");
     }
 
-    return _data[index];
+    return _data.get()[index];
   }
 
   template <typename T>
   constexpr Vector<T>::reference Vector<T>::front() noexcept {
-    return _data[0];
+    return _data.get();
   }
 
   template <typename T>
   constexpr Vector<T>::reference Vector<T>::back() noexcept {
-    return _data[_size - 1];
+    return _data.get()[_size - 1];
   }
   
   template <typename T>
   void Vector<T>::resize() {
     Vector<T>::size_type new_capacity = _capacity ? _capacity * 2 : 1;
-    auto new_data{ std::make_unique<Vector<T>::value_type[]>(new_capacity) };
+    auto new_storage{ std::unique_ptr<Vector<T>::value_type, Vector<T>::Deleter>(static_cast<T*>(::operator new(sizeof(T)* new_capacity)), Deleter{}) };
 
-    for (Vector<T>::size_type i{}; i < _size; ++i) {
-      new_data[i] = std::move(_data[i]);
-    }
+    std::uninitialized_move(_data.get(), _data.get() + _size, new_storage.get());
+    std::destroy(_data.get(), _data.get() + _size);
 
-    _data = std::move(new_data);
+    _data = std::move(new_storage);
     _capacity = new_capacity;
   }
 
   // Element modifiers
   template <typename T>
-  constexpr void Vector<T>::push_back(const Vector<T>::reference value) {
+  void Vector<T>::push_back(const Vector<T>::reference value) {
     if (_size == _capacity) {
       resize();
     }
 
-    _data[_size++] = value;
+    std::construct_at(_data.get() + _size++, value);
   }
 
   template <typename T>
-  constexpr void Vector<T>::push_back(T&& value) {
+  void Vector<T>::push_back(T&& value) {
     if (_size == _capacity) {
       resize();
     }
 
-    _data[_size++] = std::move(value);
+    std::construct_at(_data.get() + _size++, std::move(value));
   }
 
   template <typename T>
-  constexpr Vector<T>::reference Vector<T>::pop_back() {
+  Vector<T>::value_type Vector<T>::pop_back() {
     if (this->empty()) {
       throw std::length_error("Vector is empty.");
     }
 
-    return _data[_size--];
+    Vector<T>::value_type val{ std::move(_data.get()[--_size]) };
+    std::destroy_at(_data.get() + _size);
+
+    return val;
   }
+
 }

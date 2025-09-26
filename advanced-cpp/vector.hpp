@@ -28,9 +28,9 @@ namespace Custom {
     reference operator[](const size_type index) noexcept;
     std::expected<value_type, std::string_view> at(const size_type index) const; // change return to reference
     
-    constexpr void push_back(const reference value);
-    constexpr void push_back(T&& value);
-    constexpr reference pop_back();
+    void push_back(const reference value);
+    void push_back(T&& value);
+    value_type pop_back();
 
     constexpr bool empty() const noexcept;
 
@@ -43,10 +43,19 @@ namespace Custom {
     // vector comparison
     
   private:
+
     size_type _size;
     size_type _capacity;
-    std::unique_ptr<value_type[]> _data;
     
+    struct RawDeleter {
+      void operator()(T* ptr) const noexcept {
+        ::operator delete(ptr);
+      }
+    };
+    using Deleter = RawDeleter;
+
+    std::unique_ptr<T, Deleter> _data;
+
     void resize();
   };
 }
