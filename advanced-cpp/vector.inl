@@ -66,7 +66,7 @@ namespace Custom {
 
   // Assignment operators
   template <typename T>
-  constexpr Vector<T>& Vector<T>::operator=(const Vector& other) {
+  Vector<T>& Vector<T>::operator=(const Vector& other) {
     if (this == &other) {
       return *this;
     }
@@ -80,7 +80,7 @@ namespace Custom {
   }
 
   template <typename T>
-  constexpr Vector<T>& Vector<T>::operator=(Vector&& other) noexcept {
+  Vector<T>& Vector<T>::operator=(Vector&& other) noexcept {
     if (this != &other) {
       _size = other._size;
       _capacity = other._capacity;
@@ -100,12 +100,12 @@ namespace Custom {
   }
 
   template <typename T>
-  std::expected<typename Vector<T>::value_type, std::string_view> Vector<T>::at(const Vector<T>::size_type index) const {
+  std::optional<typename Vector<T>::reference> Vector<T>::at(const Vector<T>::size_type index) const {
     if (index >= _size) {
-      return std::unexpected<std::string_view>("Vector index out of range.");
+      return std::nullopt;
     }
 
-    return _data.get()[index];
+    return std::optional{ _data.get()[index] };
   }
 
   template <typename T>
