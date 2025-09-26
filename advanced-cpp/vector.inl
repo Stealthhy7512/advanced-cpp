@@ -14,11 +14,7 @@ namespace Custom {
   template <typename T>
   Vector<T>::Vector(const Vector& other) : _size(other._size), _capacity(other._capacity) {
     if (_capacity > 0) {
-      _data = std::unique_ptr<T, Vector<T>::Deleter>(
-        static_cast<T*>(::operator new(sizeof(T) * _capacity)), 
-        Deleter{}
-      );
-      
+      _data = allocate(_capacity);
       std::uninitialized_copy(other._data.get(), other._data.get() + _size, _data.get());
     } else {
       _data = nullptr;
@@ -34,12 +30,8 @@ namespace Custom {
   template <typename T>
   Vector<T>::Vector(std::initializer_list<Vector<T>::value_type> ilist) : _size(ilist.size()), _capacity(ilist.size()) {
     if (_capacity > 0) {
-    _data = std::unique_ptr<T, Vector<T>::Deleter>(
-      static_cast<T*>(::operator new(sizeof(T) * _capacity)),
-      Deleter{}
-    );
-
-    std::uninitialized_copy(ilist.begin(), ilist.end(), _data.get());
+      _data = allocate(_capacity);
+      std::uninitialized_copy(ilist.begin(), ilist.end(), _data.get());
     } else {
       _data = nullptr;
     }
@@ -144,10 +136,7 @@ namespace Custom {
   template <typename T>
   void Vector<T>::resize() {
     Vector<T>::size_type new_capacity = _capacity ? _capacity * 2 : 1;
-    auto new_storage{ std::unique_ptr<Vector<T>::value_type, Vector<T>::Deleter>(
-      static_cast<T*>(::operator new(sizeof(T) * new_capacity)),
-      Deleter{}
-      ) };
+    auto new_storage{ allocate(new_capacity) };
 
     std::uninitialized_move(_data.get(), _data.get() + _size, new_storage.get());
     std::destroy(_data.get(), _data.get() + _size);
