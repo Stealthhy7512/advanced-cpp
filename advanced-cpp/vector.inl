@@ -97,7 +97,7 @@ namespace Custom {
   requires std::convertible_to<U, T>
   void Vector<T>::push_back(U&& value) {
     if (_size == _capacity) {
-      resize();
+      grow();
     }
 
     std::construct_at(_data.get() + _size++, std::forward<U>(value));
@@ -116,7 +116,7 @@ namespace Custom {
   }
 
   template <typename T>
-  void Vector<T>::resize() {
+  void Vector<T>::grow() {
     Vector<T>::size_type new_capacity = _capacity ? _capacity * 2 : 1;
     auto new_storage{ allocate(new_capacity) };
 
